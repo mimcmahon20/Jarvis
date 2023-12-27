@@ -1,6 +1,7 @@
 import pvporcupine
 import pyaudio
 import struct
+import command_listener  # assuming both files are in the same directory
 
 ACCESS_KEY = 'DZzwIYi6/ckJ66kdntAOPfjmzl9iLhYJChPDMOvMaTaeFQMEcIWtHQ=='
 
@@ -32,6 +33,7 @@ def listen_for_wake_word():
 
             if keyword_index >= 0:
                 print("Jarvis wake word detected!")
+                on_wake_word_detected()
 
     finally:
         if porcupine is not None:
@@ -42,6 +44,12 @@ def listen_for_wake_word():
 
         if pa is not None:
             pa.terminate()
+
+def on_wake_word_detected():
+    """
+    Called when the wake word is detected.
+    """
+    command_listener.listen_for_command()
 
 if __name__ == "__main__":
     listen_for_wake_word()
