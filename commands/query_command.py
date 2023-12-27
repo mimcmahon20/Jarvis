@@ -1,13 +1,16 @@
-# You must set your OpenAI API key here
-api_key = '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'
-
 import os
 import sys
 from openai import OpenAI
+from dotenv import load_dotenv
+
+# Add the directory containing speech_output.py to the system path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 from speech_output import speak
+
+# Load environment variables from .env file
+load_dotenv()
 
 def query_command(query):
     """
@@ -24,7 +27,7 @@ def query_command(query):
         completion = client.chat.completions.create(
             model="gpt-4-0613",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "You are a voice activated assistant named Jarvis speaking to a user named Maguire. You are helping Maguire with a query."},
                 {"role": "user", "content": query}
             ]
         )
@@ -42,5 +45,3 @@ def query_command(query):
     except Exception as e:
         speak(f"Sorry, there was an error processing your request: {e}")
 
-
-# Example usage: query_command("Hello!")
