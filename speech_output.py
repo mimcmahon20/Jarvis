@@ -10,6 +10,10 @@ def speak(text):
     """
     def _speak():
         engine = pyttsx3.init()
+        voices = engine.getProperty('voices')
+        for voice in voices:
+            if(voice.name == 'Microsoft Hazel Desktop - English (Great Britain)'):
+                engine.setProperty('voice', voice.id)
         engine.say(text)
         engine.runAndWait()
 

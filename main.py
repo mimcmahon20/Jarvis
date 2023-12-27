@@ -27,8 +27,7 @@ def main():
 
     except KeyboardInterrupt:
         # Clean up operations
-        destroy_indicator()
-        cleanup_speech_threads()
+        stop()
 
     finally:
         try:
@@ -48,6 +47,10 @@ def main():
                 pa.terminate()
         except Exception as e:
             print(f"Error terminating PyAudio instance: {e}")
+
+def stop(): 
+    destroy_indicator()
+    cleanup_speech_threads()
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,9 @@
 import pvporcupine
 import pyaudio
 import struct
+import os
+import platform
+import winsound
 from visual_indicator import start_indicator, stop_indicator
 import command_listener 
 
@@ -21,6 +24,21 @@ def on_wake_word_detected():
     """
     Called when the wake word is detected.
     """
+    # Play a beep sound
+    if platform.system() == "Windows":
+        total_duration = 350  # Total duration in ms
+        min_frequency = 250  # Minimum frequency in Hz
+        max_frequency = 500  # Maximum frequency in Hz
+        num_steps = 3  # Number of frequency steps
+
+        for i in range(num_steps):
+            frequency = min_frequency + i * (max_frequency - min_frequency) / num_steps
+            duration = total_duration / num_steps
+            winsound.Beep(int(frequency), int(duration))
+    else:
+        duration = 0.25  # Duration in seconds for Unix systems
+        for frequency in range(20, 501):
+            os.system('play -nq -t alsa synth {} sine {}'.format(duration / 500, frequency))
     start_indicator()
     command_listener.listen_for_command()
     stop_indicator()
