@@ -1,7 +1,8 @@
 import pvporcupine
 import pyaudio
 import struct
-import command_listener  # assuming both files are in the same directory
+import command_listener 
+from visual_indicator import start_indicator, stop_indicator
 
 ACCESS_KEY = 'DZzwIYi6/ckJ66kdntAOPfjmzl9iLhYJChPDMOvMaTaeFQMEcIWtHQ=='
 
@@ -49,7 +50,9 @@ def on_wake_word_detected():
     """
     Called when the wake word is detected.
     """
+    start_indicator()
     command_listener.listen_for_command()
+    stop_indicator()
 
 if __name__ == "__main__":
     listen_for_wake_word()
