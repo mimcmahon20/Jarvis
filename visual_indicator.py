@@ -15,7 +15,11 @@ class IndicatorWindow:
         self.root.mainloop()
 
     def hide(self):
+        self.root.quit()
         self.root.withdraw()
+
+    def destroy(self):
+        self.root.destroy()
 
 indicator = None
 
@@ -29,9 +33,15 @@ def hide_indicator():
     if indicator:
         indicator.hide()
 
+def destroy_indicator():
+    global indicator
+    if indicator:
+        indicator.destroy()
+        
 # Example usage in a separate thread
 def start_indicator():
     Thread(target=show_indicator).start()
 
 def stop_indicator():
     Thread(target=hide_indicator).start()
+

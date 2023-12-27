@@ -2,7 +2,8 @@ import pvporcupine
 import pyaudio
 import struct
 import command_listener 
-from visual_indicator import start_indicator, stop_indicator
+from visual_indicator import start_indicator, stop_indicator, destroy_indicator
+import sys
 
 ACCESS_KEY = 'DZzwIYi6/ckJ66kdntAOPfjmzl9iLhYJChPDMOvMaTaeFQMEcIWtHQ=='
 
@@ -36,15 +37,33 @@ def listen_for_wake_word():
                 print("Jarvis wake word detected!")
                 on_wake_word_detected()
 
+    except KeyboardInterrupt:
+        # Clean up operations
+        destroy_indicator()
+        sys.exit(0)
+
     finally:
-        if porcupine is not None:
-            porcupine.delete()
+        try:
+            if porcupine is not None:
+                print("Deleting Porcupine instance...")
+                porcupine.delete()
+        except Exception as e:
+            print(f"Error deleting Porcupine instance: {e}")
 
-        if audio_stream is not None:
-            audio_stream.close()
+        try:
+            if audio_stream is not None:
+                print("Closing audio stream...")
+                audio_stream.close()
+        except Exception as e:
+            print(f"Error closing audio stream: {e}")
 
-        if pa is not None:
-            pa.terminate()
+        try:
+            if pa is not None:
+                print("Terminating PyAudio instance...")
+                pa.terminate()
+        except Exception as e:
+            print(f"Error terminating PyAudio instance: {e}")
+
 
 def on_wake_word_detected():
     """

@@ -1,6 +1,7 @@
 import speech_recognition as sr
-import subprocess
 from speech_output import speak
+from commands.open_application import open_application
+from commands.query_command import query_command
 
 def listen_for_command():
     """
@@ -39,18 +40,5 @@ def execute_action(action):
     if action.lower().startswith("open "):
         app_name = action[5:].strip()  # Extracting the application name
         open_application(app_name)
-
-def open_application(app_name):
-    """
-    Opens an application based on the given app name.
-    """
-    print("Opening " + app_name)
-    speak("Opening " + app_name)
-    try:
-        # Windows:
-        subprocess.Popen(f'start {app_name}', shell=True)
-        # MacOS (uncomment if using MacOS):
-        # subprocess.Popen(['open', '-a', app_name])
-        print(f"Opening {app_name}...")
-    except Exception as e:
-        print(f"Error opening {app_name}: {e}")
+    else:
+        query_command(action)
