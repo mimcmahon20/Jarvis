@@ -1,47 +1,49 @@
+# visual_indicator.py
 import tkinter as tk
-from threading import Thread
+from tkinter import PhotoImage
+import os
 
 class IndicatorWindow:
-    def __init__(self):
-        self.root = tk.Tk()
-        self.root.overrideredirect(True)  # Remove window decorations
-        self.root.attributes("-topmost", True)  # Keep on top
-        self.root.geometry("+{}+{}".format(self.root.winfo_screenwidth() - 100, 50))  # Position
-        self.canvas = tk.Canvas(self.root, height=50, width=50, bg="blue", highlightthickness=0)
-        self.canvas.pack()
+    def __init__(self, root):
+        self.root = root
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.faceTalkingImg = PhotoImage(file=os.path.join(current_dir, "faceTalking.png"))
+        self.faceListeningImg = PhotoImage(file=os.path.join(current_dir, "faceListening.png"))
+
+        self.label = tk.Label(root, image=self.faceListeningImg)
+        self.label.pack()
+        self.hide()
+    def update_to_talking(self):
+        self.label.config(image=self.faceTalkingImg)
+
+    def update_to_listening(self):
+        self.label.config(image=self.faceListeningImg)
 
     def show(self):
-        self.root.deiconify()
-        self.root.mainloop()
+        self.root.deiconify()  # Show the window
 
     def hide(self):
-        self.root.quit()
-        self.root.withdraw()
+        self.root.withdraw()  # Hide the window
 
-    def destroy(self):
-        self.root.destroy()
+# Global instance of IndicatorWindow
+root = tk.Tk()
+root.overrideredirect(True)
+root.attributes("-topmost", True)
+indicator_window = IndicatorWindow(root)
 
-indicator = None
+def show_talking():
+    root.after(0, indicator_window.show)
+    root.after(0, indicator_window.update_to_talking)
 
-def show_indicator():
-    global indicator
-    indicator = IndicatorWindow()
-    indicator.show()
+def show_listening():
+    root.after(0, indicator_window.show)
+    root.after(0, indicator_window.update_to_listening)
 
-def hide_indicator():
-    global indicator
-    if indicator:
-        indicator.hide()
+def hide():
+    root.after(0, indicator_window.hide)
 
-def destroy_indicator():
-    global indicator
-    if indicator:
-        indicator.destroy()
-        
-# Example usage in a separate thread
-def start_indicator():
-    Thread(target=show_indicator).start()
+def start_mainloop():
+    root.mainloop()
 
-def stop_indicator():
-    Thread(target=hide_indicator).start()
-
+def stop_mainloop():
+    root.quit()

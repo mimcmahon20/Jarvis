@@ -16,7 +16,7 @@ def open_application(app_name):
     speak("Opening " + app_name)
     try:
         # Windows:
-        subprocess.Popen(f'start {app_name}', shell=True)
+        subprocess.Popen(f'start "" "{app_name}"', shell=True)
         # MacOS (uncomment if using MacOS):
         # subprocess.Popen(['open', '-a', app_name])
         print(f"Opening {app_name}...")

@@ -2,11 +2,6 @@
  
 ## Commands to implement
 
-Web Search:
-
-Command: "Jarvis, search for [topic]."
-Action: Opens the user's default web browser and performs a search for the specified topic using a search engine like Google.
-
 Weather Updates:
 Command: "Jarvis, what's the weather like today?"
 Action: Retrieves the current weather information for the user's location or a specified location and reads it out loud.
@@ -42,12 +37,3 @@ Action: Posts the specified message to the user’s Twitter account (or other so
 Home Automation Control:
 Command: "Jarvis, turn on the lights" or "Jarvis, set the thermostat to 70 degrees."
 Action: Interfaces with smart home devices to control lighting, temperature, etc.
-
-Custom Scripts and Functions:
-Command: "Jarvis, run [custom script]."
-Action: Executes a pre-defined script or function, which could be anything from automating a routine task to starting 
-complex workflow.
-
-General Knowledge and Q&A:
-Command: "Jarvis, who is [person]?" or "Jarvis, how far is it to [location]?"
-Action: Looks up and provides information on general knowledge questions.
