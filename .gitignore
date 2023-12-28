@@ -1,2 +1,10 @@
 .env
 token.json
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+/__pycache__/
+.python-version
+pip-log.txt
+pip-delete-this-directory.txt
