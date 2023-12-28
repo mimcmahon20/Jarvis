@@ -1,7 +1,6 @@
 import sys
 import threading
 from wake_word_listener import listen_for_wake_word
-from speech_output import cleanup_speech_threads
 import pvporcupine
 import pyaudio
 
@@ -37,7 +36,6 @@ def run_jarvis():
                 audio_stream.close()
             if pa is not None:
                 pa.terminate()
-            cleanup_speech_threads()
 
 if __name__ == "__main__":
     try:
