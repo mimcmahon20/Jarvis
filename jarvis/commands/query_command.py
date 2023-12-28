@@ -1,8 +1,8 @@
 import os
 import sys
-from commands.spotify_commands import spotify_commands
-from commands.open_application import open_application
-from commands.google_calendar_commands import google_calendar_commands
+from .spotify_commands import spotify_commands
+from .open_application import open_application
+from .google_calendar_commands import google_calendar_commands
 
 from openai import OpenAI
 from dotenv import load_dotenv
