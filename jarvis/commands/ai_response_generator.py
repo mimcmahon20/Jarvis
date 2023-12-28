@@ -19,7 +19,7 @@ def get_spoken_response_from_command(command, response):
         prompt = f"Summarize the following information into a brief spoken response:\nCommand: {command}\nResponse: {response}"
 
         completion = client.chat.completions.create(
-            model="gpt-4-0613",
+            model="gpt-4-1106-preview",
             messages=[{"role": "system", "content": prompt}]
         )
 

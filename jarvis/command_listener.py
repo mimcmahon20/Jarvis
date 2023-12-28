@@ -60,7 +60,8 @@ def is_open_command(action):
         return False
     
 def is_calendar_command(action):
-    if action.lower().startswith("calendar this week"):
+    if action.lower().startswith("calendar this week") or action.lower().startswith("calendar today") or action.lower().startswith("calendar tomorrow") or action.lower().startswith("calendar on ") or action.lower().startswith("add event") or action.lower().startswith("find event"):
         return True
     else:
         return False
+    

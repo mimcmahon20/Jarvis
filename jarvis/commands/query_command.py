@@ -1,3 +1,4 @@
+import datetime
 import os
 import sys
 from .spotify_commands import spotify_commands
@@ -46,7 +47,7 @@ def query_command(query):
                     open_application(app_name)
                 elif "play " in answer.lower() or "pause" in answer.lower() or "stop" in answer.lower() or "resume" in answer.lower() or "raise spotify volume" in answer.lower() or "lower spotify volume" in answer.lower() or "play playlist " in answer.lower() or "play artist " in answer.lower():
                     spotify_commands(answer)
-                elif "add event" in answer.lower() or "calendar this week" in answer.lower():
+                elif "add event" in answer.lower() or "calendar this week" in answer.lower() or "calendar today" in answer.lower() or "calendar tomorrow" in answer.lower() or "calendar on " in answer.lower() or "find event" in answer.lower():
                     print("calendar event:" + answer)
                     google_calendar_commands(answer)
                 else:
@@ -61,6 +62,7 @@ def query_command(query):
         speak(f"Sorry, there was an error processing your request: {e}")
 
 def create_openai_prompt(query):
+    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
     system_message = (
         "I am a voice-activated assistant named Jarvis speaking to a user named Maguire. "
         "Maguire can give me specific commands, and my responses should be in the format of these commands. "
@@ -71,11 +73,16 @@ def create_openai_prompt(query):
         "4. 'Play playlist [playlist name]' to play a specific Spotify playlist. For example, 'Play playlist Summer Hits'. "
         "5. 'Play artist [artist name]' to play songs from a specific artist on Spotify. For example, 'Play artist Taylor Swift'. "
         "6. 'What's on my calendar this week?' to get a summary of events for the current week from Google Calendar. "
-        "7. 'Add event [event name] on [date] at [time]' to add an event to Google Calendar. For example, 'Add event Meeting with John on 2021-06-15 at 10:00'. Remember, the year is 2024 "
+        "7. 'Add event [event name] on [date] at [time]' to add an event to Google Calendar. For example, 'Add event Meeting with John on 2021-06-15 at 10:00'."
+        "8. 'calendar today' to get a summary of events for the current day from Google Calendar. "
+        "9. 'calendar tomorrow' to get a summary of events for the next day from Google Calendar. "
+        "10. 'calendar on [date]' to get a summary of events for a specific date from Google Calendar. For example, 'What's on my calendar on 2021-06-15?'."
+        "11. 'Find event [event name]' to find an event on Google Calendar. For example, 'Find event Meeting with John'."
         "If Maguire's request matches one of these commands, I should respond with the exact command format. "
         "For example, if Maguire asks how to listen to Taylor Swift on Spotify, I should respond with 'Play artist Taylor Swift'. "
         "For general queries that don't match these commands, I should provide a clear, concise, and informative response suitable for a voice assistant. "
         "All my responses should be brief and to the point, as they are spoken aloud."
+        "The current date is: " + current_date + ". "
     )
 
     user_message = {"role": "user", "content": query}
