@@ -1,6 +1,5 @@
 import pyttsx3
 import threading
-import visual_indicator
 
 # Global list to keep track of speech threads
 active_speech_threads = []
@@ -21,13 +20,11 @@ def speak(text):
         # Remove the thread from the active list when done
         active_speech_threads.remove(thread)
 
-    visual_indicator.show_talking()
     # Create and start a new thread for the speech
     thread = threading.Thread(target=_speak)
     thread.start()
     # Add the thread to the active list
     active_speech_threads.append(thread)
-    visual_indicator.hide()
 
 def cleanup_speech_threads():
     """

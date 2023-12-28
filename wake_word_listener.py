@@ -4,7 +4,6 @@ import struct
 import os
 import platform
 import winsound
-import visual_indicator
 import command_listener 
 
 def listen_for_wake_word(porcupine, pa, audio_stream):
@@ -39,6 +38,4 @@ def on_wake_word_detected():
         duration = 0.05  # Duration in seconds for Unix systems
         for frequency in range(20, 501):
             os.system('play -nq -t alsa synth {} sine {}'.format(duration / 500, frequency))
-    visual_indicator.show_talking()
     command_listener.listen_for_command()
-    visual_indicator.hide()

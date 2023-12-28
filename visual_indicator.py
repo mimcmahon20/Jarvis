@@ -1,49 +1,36 @@
-# visual_indicator.py
-import tkinter as tk
-from tkinter import PhotoImage
+import sys
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
 import os
 
-class IndicatorWindow:
-    def __init__(self, root):
-        self.root = root
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        self.faceTalkingImg = PhotoImage(file=os.path.join(current_dir, "faceTalking.png"))
-        self.faceListeningImg = PhotoImage(file=os.path.join(current_dir, "faceListening.png"))
+class IndicatorWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
 
-        self.label = tk.Label(root, image=self.faceListeningImg)
-        self.label.pack()
-        self.hide()
+    def initUI(self):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        talking_image_path = os.path.join(current_dir, "faceTalking.png")
+        listening_image_path = os.path.join(current_dir, "faceListening.png")
+
+        self.talkingPixmap = QPixmap(talking_image_path)
+        self.listeningPixmap = QPixmap(listening_image_path)
+
+        self.label = QLabel(self)
+        self.label.setPixmap(self.listeningPixmap)
+
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.show()
+
     def update_to_talking(self):
-        self.label.config(image=self.faceTalkingImg)
+        self.label.setPixmap(self.talkingPixmap)
 
     def update_to_listening(self):
-        self.label.config(image=self.faceListeningImg)
+        self.label.setPixmap(self.listeningPixmap)
 
-    def show(self):
-        self.root.deiconify()  # Show the window
-
-    def hide(self):
-        self.root.withdraw()  # Hide the window
-
-# Global instance of IndicatorWindow
-root = tk.Tk()
-root.overrideredirect(True)
-root.attributes("-topmost", True)
-indicator_window = IndicatorWindow(root)
-
-def show_talking():
-    root.after(0, indicator_window.show)
-    root.after(0, indicator_window.update_to_talking)
-
-def show_listening():
-    root.after(0, indicator_window.show)
-    root.after(0, indicator_window.update_to_listening)
-
-def hide():
-    root.after(0, indicator_window.hide)
-
-def start_mainloop():
-    root.mainloop()
-
-def stop_mainloop():
-    root.quit()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = IndicatorWindow()
+    sys.exit(app.exec_())

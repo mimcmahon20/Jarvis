@@ -1,32 +1,32 @@
-import tkinter as tk
-import subprocess
+# gui.py
+import sys
+from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
+from visual_indicator import IndicatorWindow  # Assuming IndicatorWindow is in indicator_window.py
+import main  # Import the main module
 
-def toggle_jarvis():
-    global jarvis_on
-    global jarvis_process
-    if jarvis_on:
-        # Stop Jarvis
-        subprocess.run(["python", "main.py", "--stop"])
-        jarvis_on = False
-        button.config(text="Start Jarvis")
-    else:
-        # Start Jarvis
-        jarvis_process = subprocess.Popen(["python", "main.py"])
-        jarvis_on = True
-        button.config(text="Stop Jarvis")
+class MainGUI(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
 
-# Initialize the state of Jarvis
-jarvis_on = False
-jarvis_process = None
+    def initUI(self):
+        self.indicatorWindow = IndicatorWindow()  # Initialize the indicator window
 
-# Create the main window
-root = tk.Tk()
+        self.startButton = QPushButton("Start Jarvis", self)
+        self.startButton.clicked.connect(self.startJarvis)
 
-# Create a button
-button = tk.Button(root, text="Start Jarvis", command=toggle_jarvis)
+        layout = QVBoxLayout()
+        layout.addWidget(self.startButton)
+        self.setLayout(layout)
 
-# Add the button to the window
-button.pack()
+        self.setWindowTitle('Jarvis Control')
+        self.show()
 
-# Start the event loop
-root.mainloop()
+    def startJarvis(self):
+        # Call the function to start Jarvis
+        main.run_jarvis()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MainGUI()
+    sys.exit(app.exec_())
