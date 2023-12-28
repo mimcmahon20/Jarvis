@@ -1,7 +1,11 @@
 import os
 import sys
+from commands.spotify_commands import spotify_commands
+from commands.open_application import open_application
+
 from openai import OpenAI
 from dotenv import load_dotenv
+
 
 # Add the directory containing speech_output.py to the system path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -34,8 +38,19 @@ def query_command(query):
         if completion.choices:
             response = completion.choices[0]
             if hasattr(response, 'message') and response.message:
-                answer = response.message.content  # Accessing the content attribute
-                speak(answer)
+                answer = response.message.content.strip()  # Accessing the content attribute
+                # Check for specific commands and execute corresponding functions
+                if answer.lower().startswith("open "):
+                    app_name = answer[5:].strip()
+                    open_application(app_name)
+                    print('opened: ' + answer)
+                elif "play " in answer.lower() or "pause" in answer.lower() or "stop" in answer.lower() or "resume" in answer.lower() or "raise spotify volume" in answer.lower() or "lower spotify volume" in answer.lower() or "play playlist " in answer.lower() or "play artist " in answer.lower():
+                    spotify_commands(answer)
+                    print('spotified: ' + answer)
+                else:
+                    # If the response is not a recognized command, speak the response
+                    speak(answer)
+                    print('queried and found: ' + answer)
             else:
                 speak("I received an unexpected response format from the API.")
         else:
