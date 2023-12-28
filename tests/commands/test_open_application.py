@@ -29,3 +29,20 @@ def test_open_application_with_path():
                 expected_path = f"\"C:\\Program Files\\SomeApp\\SomeApp.exe\""
                 mock_popen.assert_called_with(expected_path, shell=True)
                 mock_speak.assert_called_with("Opening SomeApp")
+
+def test_open_application_with_path_not_found():
+    with patch('jarvis.commands.open_application.subprocess.Popen') as mock_popen:
+        with patch('jarvis.commands.open_application.speak') as mock_speak:
+            with patch('jarvis.commands.open_application.os.path.exists', return_value=False):
+                open_application("SomeApp")
+                mock_popen.assert_not_called()
+                mock_speak.assert_called_with("Executable for SomeApp not found.")
+
+def test_open_application_with_path_exception():
+    with patch('jarvis.commands.open_application.subprocess.Popen', side_effect=Exception("Error")) as mock_popen:
+        with patch('jarvis.commands.open_application.speak') as mock_speak:
+            with patch('jarvis.commands.open_application.os.path.exists', return_value=True):
+                open_application("SomeApp")
+                mock_popen.assert_called_with(f"\"C:\\Program Files\\SomeApp\\SomeApp.exe\"", shell=True)
+                mock_speak.assert_called_with("Error opening SomeApp")
+
