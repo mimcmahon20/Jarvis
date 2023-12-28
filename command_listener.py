@@ -2,6 +2,7 @@ import speech_recognition as sr
 from speech_output import speak
 from commands.open_application import open_application
 from commands.query_command import query_command
+from commands.spotify_commands import spotify_commands
 
 def listen_for_command():
     """
@@ -40,5 +41,7 @@ def execute_action(action):
     if action.lower().startswith("open "):
         app_name = action[5:].strip()  # Extracting the application name
         open_application(app_name)
+    if action.lower().startswith("play ") or action.lower().startswith("pause") or action.lower().startswith("stop") or action.lower().startswith("resume") or action.lower().startswith("play") or action.lower().startswith("wake up") or action.lower().startswith("raise spotify volume") or action.lower().startswith("lower spotify volume") or action.lower().startswith("play playlist ") or action.lower().startswith("play artist "):
+        spotify_commands(action)
     else:
         query_command(action)
