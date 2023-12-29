@@ -4,7 +4,13 @@ import struct
 import os
 import platform
 import winsound
-import command_listener 
+import command_listener
+
+_toggle_gui = None
+
+def set_toggle_gui_function(func):
+    global _toggle_gui
+    _toggle_gui = func
 
 def listen_for_wake_word(porcupine, pa, audio_stream):
     print("Listening for the wake word...")
@@ -38,4 +44,5 @@ def on_wake_word_detected():
         duration = 0.05  # Duration in seconds for Unix systems
         for frequency in range(20, 501):
             os.system('play -nq -t alsa synth {} sine {}'.format(duration / 500, frequency))
+    _toggle_gui()
     command_listener.listen_for_command()

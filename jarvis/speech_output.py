@@ -4,6 +4,17 @@ from pathlib import Path
 from playsound import playsound
 import tempfile
 
+_update_gui = None
+_toggle_gui = None
+
+def set_update_gui_function(func):
+    global _update_gui
+    _update_gui = func
+
+def set_toggle_gui_function(func):
+    global _toggle_gui
+    _toggle_gui = func
+
 def speak(text):
     """
     Converts the given text to speech using OpenAI's TTS API and plays the audio.
@@ -28,7 +39,8 @@ def speak(text):
             voice="fable",
             input=text
         )
-
+        if _update_gui and _toggle_gui:
+            _update_gui('talking')
         # Stream the response to a file
         response.stream_to_file(speech_file_path)
 
@@ -39,4 +51,7 @@ def speak(text):
         # Remove the speech file
         if os.path.exists(speech_file_path):
             os.remove(speech_file_path)
+            if _update_gui and _toggle_gui:
+                _update_gui('listening')
+                _toggle_gui()
 

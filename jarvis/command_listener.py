@@ -5,6 +5,12 @@ from commands.query_command import query_command
 from commands.spotify_commands import spotify_commands
 from commands.google_calendar_commands import google_calendar_commands
 
+_update_gui = None
+
+def set_update_gui_function(func):
+    global _update_gui
+    _update_gui = func
+
 def listen_for_command():
     """
     Listens for a spoken command and converts it to text.
@@ -30,6 +36,8 @@ def process_command(command_text):
     """
     # Determine the type of command and take appropriate action
     # This can be expanded or modified as needed
+    if _update_gui:
+        _update_gui('thinking')
     execute_action(command_text)
 
 def execute_action(action):
