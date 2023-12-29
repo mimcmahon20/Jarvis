@@ -153,6 +153,7 @@ def add_event(service, summary, start_time, end_time):
 
     try:
         event = service.events().insert(calendarId='primary', body=event).execute()
+        speak(f"{summary} added to your calendar.")
     except Exception as e:
         print(f"An error occurred: {e}")
 
