@@ -12,18 +12,28 @@ class VisualIndicator:
         self.root.configure(background='black')
 
         # Set up images
-        self.original_thinking_image = Image.open('thinking.png').resize((100, 100))
+        self.original_thinking_image = Image.open('thinking.png').resize((500, 500))
         self.images = {
-            'listening': ImageTk.PhotoImage(Image.open('listening.png').resize((100, 100))),
+            'listening': ImageTk.PhotoImage(Image.open('listening.png').resize((500, 500))),
             'thinking': ImageTk.PhotoImage(self.original_thinking_image),
-            'talking': ImageTk.PhotoImage(Image.open('talking.png').resize((100, 100)))
+            'talking': ImageTk.PhotoImage(Image.open('talking.png').resize((500, 500)))
         }
         self.label = tk.Label(self.root, image=self.images['listening'], background='black')
         self.label.pack()
 
         # Center the window at the top of the screen
         ws = self.root.winfo_screenwidth()
-        self.root.geometry(f'100x100+{ws//2-50}+0')
+        self.root.geometry(f'500x500+{ws//2-50}+0')
+        # Setting window size and position
+        ws = self.root.winfo_screenwidth()
+        hs = self.root.winfo_screenheight()
+        x = (ws // 2) - (500 // 2)
+        y = (hs // 2) - (500 // 2)
+        self.root.geometry(f'500x500+{x}+{y}')
+
+        # Set window opacity to 90%
+        self.root.attributes("-alpha", 0.1)
+        
         self.root.withdraw()
         self.current_mode = 'listening'
         self.rotate_event = Event()
@@ -57,12 +67,13 @@ class VisualIndicator:
 
     def rotate_thinking_image(self):
         while self.rotate_event.is_set():
-            for angle in range(0, 180, 36):  # Rotate the image in 10 steps (36 degrees each)
+            for angle in range(0, 180, 20):  # Rotate the image in 10 steps (36 degrees each)
+                if self.current_mode != 'thinking':
+                    return
                 rotated_image = ImageTk.PhotoImage(self.original_thinking_image.rotate(angle))
                 self.label.config(image=rotated_image)
                 self.label.image = rotated_image  # Prevent garbage collection
                 time.sleep(0.1)  # Time for each rotation step (total rotation time = 1 second)
-            time.sleep(0.5)  # Pause for half a second after one complete rotation
 
     def start(self):
         Thread(target=self.root.mainloop, daemon=True).start()

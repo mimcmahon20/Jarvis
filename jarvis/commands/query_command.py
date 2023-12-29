@@ -4,6 +4,7 @@ import sys
 from .spotify_commands import spotify_commands
 from .open_application import open_application
 from .google_calendar_commands import google_calendar_commands
+import json
 
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -40,6 +41,7 @@ def query_command(query):
         if completion.choices:
             response = completion.choices[0]
             if hasattr(response, 'message') and response.message:
+                log_interaction(query, response.message.content.strip())
                 answer = response.message.content.strip()  # Accessing the content attribute
                 # Check for specific commands and execute corresponding functions
                 if answer.lower().startswith("open "):
@@ -91,3 +93,19 @@ def create_openai_prompt(query):
         {"role": "system", "content": system_message},
         user_message
     ]
+
+
+def log_interaction(prompt, completion, file_path='interaction_log.json'):
+    data = {"prompt": prompt, "completion": completion}
+    
+    try:
+        with open(file_path, 'r+') as file:
+            # Load existing data and update
+            file_data = json.load(file)
+            file_data.append(data)
+            file.seek(0)
+            json.dump(file_data, file, indent=4)
+    except FileNotFoundError:
+        # If file doesn't exist, create new file and write data
+        with open(file_path, 'w') as file:
+            json.dump([data], file, indent=4)

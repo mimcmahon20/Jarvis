@@ -36,7 +36,7 @@ def speak(text):
         # Generate speech using OpenAI's TTS API
         response = client.audio.speech.create(
             model="tts-1",
-            voice="fable",
+            voice="nova",
             input=text
         )
         if _update_gui and _toggle_gui:
