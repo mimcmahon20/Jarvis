@@ -2,7 +2,7 @@ import os
 import datetime
 import sys
 from googleapiclient.discovery import build
-from .google_authentication import authenticate_google
+from .google_authentication import authenticate_google_gmail
 from .ai_response_generator import get_spoken_response_from_command
 
 # Add the directory containing speech_output.py to the system path
@@ -46,7 +46,7 @@ def get_recent_emails(service, max_results=10):
 
 def google_gmail_commands(action):
     """Executes Gmail-related commands based on the action."""
-    service = authenticate_google()
+    service = authenticate_google_gmail()
     # Speak "One moment..." before processing the response
     speak("One moment...")
 

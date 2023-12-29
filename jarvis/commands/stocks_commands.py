@@ -20,7 +20,11 @@ def get_stock_price(symbol):
         data = response.json()
         if 'Global Quote' in data and '05. price' in data['Global Quote']:
             price = data['Global Quote']['05. price']
-            speak(f"The current price of {symbol} is ${price}.")
+            #round price to hundreths place
+            price = round(float(price), 2)
+            dollars = int(price)
+            cents = int((price - dollars) * 100)
+            speak(f"The current price of {symbol} is {dollars} dollars and {cents} cents.")
         else:
             
             speak(f"Could not find price information for {symbol}.")

@@ -12,11 +12,11 @@ class VisualIndicator:
         self.root.configure(background='black')
 
         # Set up images
-        self.original_thinking_image = Image.open('thinking.png').resize((500, 500))
+        self.original_thinking_image = Image.open('thinking.png').resize((250, 250))
         self.images = {
-            'listening': ImageTk.PhotoImage(Image.open('listening.png').resize((500, 500))),
+            'listening': ImageTk.PhotoImage(Image.open('listening.png').resize((250, 250))),
             'thinking': ImageTk.PhotoImage(self.original_thinking_image),
-            'talking': ImageTk.PhotoImage(Image.open('talking.png').resize((500, 500)))
+            'talking': ImageTk.PhotoImage(Image.open('talking.png').resize((250, 250)))
         }
         self.label = tk.Label(self.root, image=self.images['listening'], background='black')
         self.label.pack()
@@ -24,15 +24,13 @@ class VisualIndicator:
         # Center the window at the top of the screen
         ws = self.root.winfo_screenwidth()
         self.root.geometry(f'500x500+{ws//2-50}+0')
-        # Setting window size and position
-        ws = self.root.winfo_screenwidth()
-        hs = self.root.winfo_screenheight()
-        x = (ws // 2) - (500 // 2)
-        y = (hs // 2) - (500 // 2)
-        self.root.geometry(f'500x500+{x}+{y}')
+        
+        # Setting window size and position, 250x250 and top left
+        self.root.geometry("250x250+0+0")
+
 
         # Set window opacity to 90%
-        self.root.attributes("-alpha", 0.1)
+        self.root.attributes("-alpha", 0.95)
         
         self.root.withdraw()
         self.current_mode = 'listening'

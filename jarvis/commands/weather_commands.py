@@ -13,7 +13,7 @@ def get_current_weather(location):
     """
     Fetches the current weather for the given location using OpenWeatherMap API.
     """
-    url = f'http://api.openweathermap.org/data/2.5/weather?q={location}&appid={WEATHER_API_KEY}&units=metric'
+    url = f'http://api.openweathermap.org/data/2.5/weather?q={location}&appid={WEATHER_API_KEY}&units=imperial'
     response = requests.get(url)
     
     if response.status_code == 200:

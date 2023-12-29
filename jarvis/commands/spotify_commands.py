@@ -45,7 +45,8 @@ def open_spotify():
     try:
         # Attempt to open Spotify - Adjust the path as needed
         subprocess.Popen('start spotify', shell=True)
-        time.sleep(1) # Wait for Spotify to open
+        time.sleep(2) # Wait for Spotify to open
+        play_pause_spotify() # Start playback to ensure this device is active
         play_pause_spotify() # Start playback to ensure this device is active
     except Exception as e:
         print(f"Error opening Spotify: {e}")

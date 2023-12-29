@@ -37,7 +37,7 @@ def query_command(query):
         client = OpenAI(api_key=api_key)
         messages = create_openai_prompt(query)
         completion = client.chat.completions.create(
-            model="gpt-4-0613",
+            model="gpt-4-1106-preview",
             messages=messages,
         )
 

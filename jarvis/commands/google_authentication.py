@@ -16,7 +16,7 @@ from speech_output import speak
 # If modifying these SCOPES, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/gmail.readonly']
 
-def authenticate_google():
+def authenticate_google_calendar():
     """Shows basic usage of the Google Calendar API."""
     creds = None
     # The file token.json stores the user's access and refresh tokens.
@@ -36,4 +36,23 @@ def authenticate_google():
             token.write(creds.to_json())
 
     service = build('calendar', 'v3', credentials=creds)
+    return service
+
+def authenticate_google_gmail():
+    """Shows basic usage of the Gmail API."""
+    creds = None
+    # The file token.json stores the user's access and refresh tokens.
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('gmail_token.json', SCOPES)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        speak("Please log in to Google.")
+        flow = InstalledAppFlow.from_client_secrets_file(
+            'credentials.json', SCOPES)
+        creds = flow.run_local_server(port=0)
+    # Save the credentials for the next run
+    with open('gmail_token.json', 'w') as token:
+        token.write(creds.to_json())
+
+    service = build('gmail', 'v1', credentials=creds)
     return service

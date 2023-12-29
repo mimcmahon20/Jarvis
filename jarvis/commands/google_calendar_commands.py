@@ -5,7 +5,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from .ai_response_generator import get_spoken_response_from_command
-from .google_authentication import authenticate_google
+from .google_authentication import authenticate_google_calendar
 
 import sys
 import os
@@ -137,7 +137,7 @@ def add_event(service, summary, start_time, end_time):
 
 def google_calendar_commands(action):
     """Executes calendar-related commands based on the action."""
-    service = authenticate_google()
+    service = authenticate_google_calendar()
     # Speak "One moment..." before processing the response
     speak("One moment...")
     if "add event" in action.lower():

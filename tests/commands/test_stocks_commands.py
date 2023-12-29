@@ -16,7 +16,7 @@ def test_get_stock_price(mock_get, mock_speak):
         'Global Quote': {'05. price': '135.67'}
     }
     stocks_commands.get_stock_price('AAPL')
-    mock_speak.assert_called_with("The current price of AAPL is $135.67.")
+    mock_speak.assert_called_with("The current price of AAPL is 135 dollars and 67 cents.")
 
     # Mock no price information case
     mock_response.json.return_value = {}
