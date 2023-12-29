@@ -5,6 +5,8 @@ from .spotify_commands import spotify_commands
 from .open_application import open_application
 from .google_calendar_commands import google_calendar_commands
 from .google_gmail_commands import google_gmail_commands
+from .stocks_commands import stock_commands
+from .weather_commands import weather_commands
 from utils.command_type_util import is_open_command, is_spotify_command, is_calendar_command, is_gmail_command
 import json
 
@@ -55,6 +57,11 @@ def query_command(query):
                     google_calendar_commands(answer)
                 elif "recent emails" in answer.lower():
                     google_gmail_commands(answer)
+                elif "get price of" in answer.lower():
+                    print("prompted AI:" + answer)
+                    stock_commands(answer)
+                elif "get weather at" in answer.lower():
+                    weather_commands(answer)
                 else:
                     # If the response is not a recognized command, speak the response
                     print("prompted AI:" + answer)
@@ -84,6 +91,8 @@ def create_openai_prompt(query):
         "10. 'calendar on [date]' to get a summary of events for a specific date from Google Calendar. For example, 'What's on my calendar on 2021-06-15?'."
         "11. 'Find event [event name]' to find an event on Google Calendar. For example, 'Find event Meeting with John'."
         "12. 'Recent emails' to get a summary of recent emails from Gmail. "
+        "13. 'Get price of [stock symbol]' to get the current price of a stock. For example, 'Get price of AAPL'."
+        "14. 'Get weather at [location]' to get the current weather at a location. For example, 'Get weather at Austin,TX,US'."
         "If Maguire's request matches one of these commands, I should respond with the exact command format. "
         "For example, if Maguire asks how to listen to Taylor Swift on Spotify, I should respond with 'Play artist Taylor Swift'. "
         "For general queries that don't match these commands, I should provide a clear, concise, and informative response suitable for a voice assistant. "

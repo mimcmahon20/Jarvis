@@ -21,3 +21,15 @@ def is_gmail_command(action):
         return True
     else:
         return False
+    
+def is_stock_command(action):
+    if action.lower().startswith("get price of"):
+        return True
+    else:
+        return False
+    
+def is_weather_command(action):
+    if action.lower().startswith("get weather at "):
+        return True
+    else:
+        return False

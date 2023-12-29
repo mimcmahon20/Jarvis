@@ -3,9 +3,7 @@ from speech_output import speak
 from commands.open_application import open_application
 from commands.query_command import query_command
 from commands.spotify_commands import spotify_commands
-from commands.google_calendar_commands import google_calendar_commands
-from commands.google_gmail_commands import google_gmail_commands
-from utils.command_type_util import is_open_command, is_spotify_command, is_calendar_command, is_gmail_command
+from utils.command_type_util import is_open_command, is_spotify_command
 
 _update_gui = None
 
@@ -52,10 +50,6 @@ def execute_action(action):
         open_application(app_name)
     elif is_spotify_command(action):
         spotify_commands(action)
-    elif is_calendar_command(action):
-        google_calendar_commands(action)
-    elif is_gmail_command(action):
-        google_gmail_commands(action)
     else:
         query_command(action)
 
