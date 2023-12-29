@@ -4,6 +4,8 @@ from commands.open_application import open_application
 from commands.query_command import query_command
 from commands.spotify_commands import spotify_commands
 from commands.google_calendar_commands import google_calendar_commands
+from commands.google_gmail_commands import google_gmail_commands
+from utils.command_type_util import is_open_command, is_spotify_command, is_calendar_command, is_gmail_command
 
 _update_gui = None
 
@@ -52,24 +54,9 @@ def execute_action(action):
         spotify_commands(action)
     elif is_calendar_command(action):
         google_calendar_commands(action)
+    elif is_gmail_command(action):
+        google_gmail_commands(action)
     else:
         query_command(action)
 
-def is_spotify_command(action): 
-    if action.lower().startswith("play ") or action.lower().startswith("pause") or action.lower().startswith("stop") or action.lower().startswith("resume") or action.lower().startswith("play") or action.lower().startswith("wake up") or action.lower().startswith("raise spotify volume") or action.lower().startswith("lower spotify volume") or action.lower().startswith("play playlist ") or action.lower().startswith("play artist "):
-        return True
-    else:
-        return False
-    
-def is_open_command(action): 
-    if action.lower().startswith("open "):
-        return True
-    else:
-        return False
-    
-def is_calendar_command(action):
-    if action.lower().startswith("calendar this week") or action.lower().startswith("calendar today") or action.lower().startswith("calendar tomorrow") or action.lower().startswith("calendar on ") or action.lower().startswith("add event") or action.lower().startswith("find event"):
-        return True
-    else:
-        return False
-    
+

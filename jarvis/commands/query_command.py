@@ -4,6 +4,8 @@ import sys
 from .spotify_commands import spotify_commands
 from .open_application import open_application
 from .google_calendar_commands import google_calendar_commands
+from .google_gmail_commands import google_gmail_commands
+from utils.command_type_util import is_open_command, is_spotify_command, is_calendar_command, is_gmail_command
 import json
 
 from openai import OpenAI
@@ -50,8 +52,9 @@ def query_command(query):
                 elif "play " in answer.lower() or "pause" in answer.lower() or "stop" in answer.lower() or "resume" in answer.lower() or "raise spotify volume" in answer.lower() or "lower spotify volume" in answer.lower() or "play playlist " in answer.lower() or "play artist " in answer.lower():
                     spotify_commands(answer)
                 elif "add event" in answer.lower() or "calendar this week" in answer.lower() or "calendar today" in answer.lower() or "calendar tomorrow" in answer.lower() or "calendar on " in answer.lower() or "find event" in answer.lower():
-                    print("calendar event:" + answer)
                     google_calendar_commands(answer)
+                elif "recent emails" in answer.lower():
+                    google_gmail_commands(answer)
                 else:
                     # If the response is not a recognized command, speak the response
                     print("prompted AI:" + answer)
@@ -80,6 +83,7 @@ def create_openai_prompt(query):
         "9. 'calendar tomorrow' to get a summary of events for the next day from Google Calendar. "
         "10. 'calendar on [date]' to get a summary of events for a specific date from Google Calendar. For example, 'What's on my calendar on 2021-06-15?'."
         "11. 'Find event [event name]' to find an event on Google Calendar. For example, 'Find event Meeting with John'."
+        "12. 'Recent emails' to get a summary of recent emails from Gmail. "
         "If Maguire's request matches one of these commands, I should respond with the exact command format. "
         "For example, if Maguire asks how to listen to Taylor Swift on Spotify, I should respond with 'Play artist Taylor Swift'. "
         "For general queries that don't match these commands, I should provide a clear, concise, and informative response suitable for a voice assistant. "
