@@ -14,11 +14,11 @@ class VisualIndicator:
 
         # Set up images with correct paths
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        self.original_thinking_image = Image.open(os.path.join(current_dir, 'thinking.png')).resize((250, 250))
+        self.original_thinking_image = Image.open(os.path.join(current_dir, 'assets/thinking.png')).resize((250, 250))
         self.images = {
-            'listening': ImageTk.PhotoImage(Image.open(os.path.join(current_dir, 'listening.png')).resize((250, 250))),
+            'listening': ImageTk.PhotoImage(Image.open(os.path.join(current_dir, 'assets/listening.png')).resize((250, 250))),
             'thinking': ImageTk.PhotoImage(self.original_thinking_image),
-            'talking': ImageTk.PhotoImage(Image.open(os.path.join(current_dir, 'talking.png')).resize((250, 250)))
+            'talking': ImageTk.PhotoImage(Image.open(os.path.join(current_dir, 'assets/talking.png')).resize((250, 250)))
         }
         self.label = tk.Label(self.root, image=self.images['listening'], background='black')
         self.label.pack()
