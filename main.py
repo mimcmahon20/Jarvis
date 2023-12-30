@@ -1,11 +1,15 @@
 import sys
+from PyQt5.QtWidgets import QApplication
 from threading import Thread
 from jarvis.jarvis_core import JarvisCore
 from jarvis.visual_indicator import VisualIndicator
 import jarvis.components.speech_output as speech_output
 import jarvis.components.command_listener as command_listener
 import jarvis.components.wake_word_listener as wake_word_listener
+from jarvis.gui.gui import JarvisWindow
 
+
+'''
 # Create the visual indicator instance
 indicator = VisualIndicator()
 
@@ -31,18 +35,25 @@ def toggle_gui():
 
 speech_output.set_toggle_gui_function(toggle_gui)
 wake_word_listener.set_toggle_gui_function(toggle_gui)
-
+'''
 
 # Initialize Jarvis Core
 jarvis_core = JarvisCore('DZzwIYi6/ckJ66kdntAOPfjmzl9iLhYJChPDMOvMaTaeFQMEcIWtHQ==')
 
 if __name__ == "__main__":
     try:
+        # Initialize the PyQt application
+        app = QApplication(sys.argv)
+        mainWin = JarvisWindow()
+
         # Start Jarvis Core in a separate thread
         Thread(target=jarvis_core.run, daemon=True).start()
 
-        # Run the Tkinter main loop in the main thread
-        indicator.root.mainloop()
+        # Show the PyQt window
+        mainWin.show()
+
+        # Start the PyQt event loop in the main thread
+        sys.exit(app.exec_())
     except KeyboardInterrupt:
         jarvis_core.stop()
         sys.exit()

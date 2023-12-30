@@ -44,5 +44,6 @@ def on_wake_word_detected():
         duration = 0.05  # Duration in seconds for Unix systems
         for frequency in range(20, 501):
             os.system('play -nq -t alsa synth {} sine {}'.format(duration / 500, frequency))
-    _toggle_gui()
+    if _toggle_gui:
+        _toggle_gui()
     command_listener.listen_for_command()
