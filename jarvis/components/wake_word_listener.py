@@ -12,10 +12,10 @@ def set_toggle_gui_function(func):
     global _toggle_gui
     _toggle_gui = func
 
-def listen_for_wake_word(porcupine, pa, audio_stream):
+def listen_for_wake_word(porcupine, pa, audio_stream, is_running):
     print("Listening for the wake word...")
 
-    while True:
+    while is_running():
         pcm = audio_stream.read(porcupine.frame_length)
         pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
 
@@ -24,6 +24,7 @@ def listen_for_wake_word(porcupine, pa, audio_stream):
         if keyword_index >= 0:
             print("Jarvis wake word detected!")
             on_wake_word_detected()
+            break # Exit the loop to stop listening for the wake word
 
 def on_wake_word_detected():
     """

@@ -12,6 +12,7 @@ class JarvisCore:
         self.is_running = True
 
     def run(self):
+        self.is_running = True
         while self.is_running:
             try:
                 porcupine = pvporcupine.create(access_key=self.access_key, keywords=["jarvis"])
@@ -23,8 +24,8 @@ class JarvisCore:
                     input=True,
                     frames_per_buffer=porcupine.frame_length
                 )
-
-                listen_for_wake_word(porcupine, pa, audio_stream)
+                if self.is_running:
+                    listen_for_wake_word(porcupine, pa, audio_stream, lambda: self.is_running)
 
             finally:
                 if porcupine is not None:

@@ -1,0 +1,22 @@
+[
+    {
+        "speaker": "user",
+        "text": "Hello, how can I assist you?"
+    },
+    {
+        "speaker": "jarvis",
+        "text": "Sure, I can help with that."
+    },
+    {
+        "speaker": "user",
+        "text": "Please provide more details."
+    },
+    {
+        "speaker": "jarvis",
+        "text": "I'm sorry, I don't have the information you're looking for."
+    },
+    {
+        "speaker": "user",
+        "text": "Thank you for using our service."
+    }
+]

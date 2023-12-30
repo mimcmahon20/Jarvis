@@ -11,6 +11,13 @@ def set_update_gui_function(func):
     global _update_gui
     _update_gui = func
 
+# Global variable to hold the conversation signal
+conversation_signal = None
+
+def set_conversation_signal(signal):
+    global conversation_signal
+    conversation_signal = signal
+
 def listen_for_command():
     """
     Listens for a spoken command and converts it to text.
@@ -22,6 +29,8 @@ def listen_for_command():
         audio = recognizer.listen(source)
         try:
             command = recognizer.recognize_google(audio)
+            if conversation_signal:
+                conversation_signal.update_conversation.emit('user', command)
             process_command(command)
         except sr.UnknownValueError:
             print("Sorry, I didn't understand that.")
