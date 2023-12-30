@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from speech_output import speak
+from jarvis.components.speech_output import speak
 
 # Load environment variables from .env file
 load_dotenv()

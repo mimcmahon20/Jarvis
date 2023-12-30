@@ -1,9 +1,9 @@
 import speech_recognition as sr
-from speech_output import speak
-from commands.open_application import open_application
-from commands.query_command import query_command
-from commands.spotify_commands import spotify_commands
-from utils.command_type_util import is_open_command, is_spotify_command
+from jarvis.components.speech_output import speak
+from jarvis.commands.open_application import open_application
+from jarvis.commands.query_command import query_command
+from jarvis.commands.spotify_commands import spotify_commands
+from jarvis.utils.command_type_util import is_open_command, is_spotify_command
 
 _update_gui = None
 

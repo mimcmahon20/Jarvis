@@ -14,7 +14,7 @@ import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from speech_output import speak
+from jarvis.components.speech_output import speak
 
 def get_week_events(service):
     """Fetches events for the current week from Google Calendar and speaks a summary."""

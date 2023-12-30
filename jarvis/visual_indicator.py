@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from threading import Thread, Event
 import time
+import os
 
 class VisualIndicator:
     def __init__(self):
@@ -11,12 +12,13 @@ class VisualIndicator:
         #make background black
         self.root.configure(background='black')
 
-        # Set up images
-        self.original_thinking_image = Image.open('thinking.png').resize((250, 250))
+        # Set up images with correct paths
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.original_thinking_image = Image.open(os.path.join(current_dir, 'thinking.png')).resize((250, 250))
         self.images = {
-            'listening': ImageTk.PhotoImage(Image.open('listening.png').resize((250, 250))),
+            'listening': ImageTk.PhotoImage(Image.open(os.path.join(current_dir, 'listening.png')).resize((250, 250))),
             'thinking': ImageTk.PhotoImage(self.original_thinking_image),
-            'talking': ImageTk.PhotoImage(Image.open('talking.png').resize((250, 250)))
+            'talking': ImageTk.PhotoImage(Image.open(os.path.join(current_dir, 'talking.png')).resize((250, 250)))
         }
         self.label = tk.Label(self.root, image=self.images['listening'], background='black')
         self.label.pack()

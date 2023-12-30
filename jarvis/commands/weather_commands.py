@@ -5,7 +5,7 @@ import sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from speech_output import speak
+from jarvis.components.speech_output import speak
 
 WEATHER_API_KEY = '67d99f8b7b381d762a5c11365a4e107e'
 

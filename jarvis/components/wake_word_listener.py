@@ -4,7 +4,7 @@ import struct
 import os
 import platform
 import winsound
-import command_listener
+import jarvis.components.command_listener as command_listener
 
 _toggle_gui = None
 

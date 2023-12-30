@@ -9,7 +9,7 @@ import time
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from speech_output import speak
+from jarvis.components.speech_output import speak
 
 def authenticate_spotify():
     auth_manager = SpotifyOAuth(client_id='66af0542bb57499385d9a63583ae7232',
