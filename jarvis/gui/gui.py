@@ -127,4 +127,13 @@ def update_conversation_in_intervals(words, duration_per_word, conversation_sign
     timer = QTimer()
     interval = round(duration_per_word * 1000)  # Convert to milliseconds and round
     timer.timeout.connect(update)
-    timer.start(interval)
+
+    # Start with the first two words, if available
+    initial_words = words[:2]
+    for word in initial_words:
+        conversation_signal.update_conversation.emit('jarvis', word)
+        word_index += 1
+
+    # Start the timer for the remaining words
+    if len(words) > 2:
+        timer.start(interval)

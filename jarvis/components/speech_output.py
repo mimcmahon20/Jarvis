@@ -61,7 +61,6 @@ def speak(text):
         if _main_window:
             # Calculate word durations
             duration_per_word, words = get_word_durations(text, speech_file_path)
-            print(words)
             # Emit the signal to start the update process
             _main_window.start_update_signal.emit(words, duration_per_word)
         # Play the generated speech
