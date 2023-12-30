@@ -1,10 +1,12 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QTextEdit
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject, QTimer
+from PyQt5.QtGui import QPainter, QRadialGradient, QColor
 import json
 import os
 
 from threading import Thread
+from PyQt5.QtGui import QFont
 
 class ConversationSignal(QObject):
     # Signal with two string arguments
@@ -23,24 +25,57 @@ class JarvisWindow(QMainWindow):
         self.conversation_signal = ConversationSignal()
         self.conversation_signal.update_conversation.connect(self.update_conversation_callback)
         self.start_update_signal.connect(self.start_update)
+        self.on_color = QColor(25,195,25, 27)
+        self.off_color = QColor(195,25,25, 27)
+        self.current_color = self.on_color
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('Jarvis Interface')
         self.setGeometry(300, 300, 800, 600)  # x, y, width, height
 
-        # Toggle Jarvis Button
-        self.toggle_button = QPushButton('Toggle Jarvis', self)
-        self.toggle_button.move(10, 10)  # x, y
-        self.toggle_button.clicked.connect(self.toggle_jarvis)
+        # Set the window opacity
+        self.setWindowOpacity(0.85)  # 0.5 alpha value
+
+        # Set a stylesheet for the window
+        self.setStyleSheet("color: white; font-size: 16px; ")  # blue with 0.4 opacity
 
         # Conversation Text Field
         self.conversation_text = QTextEdit(self)
         self.conversation_text.setReadOnly(True)  # Make the text field read-only
-        self.conversation_text.move(150, 10)  # x, y
-        self.conversation_text.resize(640, 580)  # width, height
+        self.conversation_text.move(10, 10)  # x, y
+        self.conversation_text.resize(780, 580)  # width, height
+        self.conversation_text.setStyleSheet("background-color: rgba(0,0,0,0); color: rgba(20,20,20,255); font-size: 16px; padding: 8px; border-radius: 18px;")  # black with 0.5 opacity
+        # self.conversation_text.setFont(QFont("Inter"))
+
+        # Toggle Jarvis Button
+        self.toggle_button = QPushButton('Start Jarvis', self)
+        self.toggle_button.move(700, 10)  # x, y
+        self.toggle_button.resize(90, 30)
+        self.toggle_button.clicked.connect(self.toggle_jarvis)
+        
+        # Set a stylesheet for the button
+        self.toggle_button.setStyleSheet("background-color: rgba(15,175,35,0.6); border-radius: 16px; border: none; outline: none;")  # red button
+        self.toggle_button.setFont(QFont("Inter"))
 
         self.load_conversation()
+
+    @property
+    def current_color(self):
+        return self._current_color
+
+    @current_color.setter
+    def current_color(self, color):
+        self._current_color = color
+        self.update()  # Schedule a repaint event
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        gradient = QRadialGradient(self.width(), 0, min(2*self.width(), self.height()))
+        gradient.setColorAt(0.0, self.current_color)
+        gradient.setColorAt(1.0, QColor(182,186,89, 27))  # white at the edges
+        painter.fillRect(self.rect(), gradient)
+
 
     def load_conversation(self):
         # Path to the conversation.json file
@@ -93,11 +128,15 @@ class JarvisWindow(QMainWindow):
             self.jarvis_core.stop()  # Assuming you have a stop method to safely terminate Jarvis
             self.is_jarvis_active = False
             self.toggle_button.setText('Start Jarvis')
+            self.toggle_button.setStyleSheet("background-color: rgba(15,175,35,0.6); border-radius: 16px; border: none; outline: none;")  # red button
+            self.current_color = self.on_color
         else:
             self.jarvis_thread = Thread(target=self.jarvis_core.run, daemon=True)
             self.is_jarvis_active = True
             self.jarvis_thread.start()
             self.toggle_button.setText('Stop Jarvis')
+            self.toggle_button.setStyleSheet("background-color: rgba(235,15,15,0.6); border-radius: 16px; border: none; outline: none;")  # red button
+            self.current_color = self.off_color
 
 def parse_json_conversation(conversation):
     """

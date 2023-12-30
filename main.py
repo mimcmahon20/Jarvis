@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication
+from PyQt5 import QtWidgets, QtCore
 from threading import Thread
 from jarvis.jarvis_core import JarvisCore
 from jarvis.visual_indicator import VisualIndicator
@@ -42,6 +43,7 @@ jarvis_core = JarvisCore('DZzwIYi6/ckJ66kdntAOPfjmzl9iLhYJChPDMOvMaTaeFQMEcIWtHQ
 
 if __name__ == "__main__":
     try:
+        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseStyleSheetPropagationInWidgetStyles, True)
         app = QApplication(sys.argv)
         mainWin = JarvisWindow(jarvis_core)  # Pass the jarvis_core instance
 
