@@ -20,7 +20,10 @@ def get_current_weather(location):
         data = response.json()
         temp = data['main']['temp']
         weather_description = data['weather'][0]['description']
-        speak(f"The current weather in {location} is {temp}°C with {weather_description}.")
+        location_city = location.split(",")[0].strip()
+        temperature_int = int(temp)
+        temperature_decimals = int((temp - temperature_int) * 10)
+        speak(f"The current weather in {location_city} is {temperature_int} point {temperature_decimals} degrees Fahrenheit with {weather_description}.")
     else:
         speak(f"Failed to fetch weather data for {location}.")
 
