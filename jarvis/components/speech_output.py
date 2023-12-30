@@ -80,6 +80,7 @@ def get_word_durations(text, audio_file_path):
     total_duration = librosa.get_duration(y=audio, sr=sr)
 
     words = text.split()
+    words.append('\n')  
     duration_per_word = total_duration / len(words)
     return duration_per_word, words
 

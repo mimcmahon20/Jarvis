@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QListWidget, QListWidgetItem, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSizePolicy
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject, QTimer, Qt
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject, QTimer, Qt, QSize
 from PyQt5.QtGui import QPainter, QRadialGradient, QColor, QFont, QColor
 import json
 import os
@@ -22,7 +22,7 @@ class ChatItemWidget(QWidget):
 
         # Set size policy
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        
         self.label.setSizePolicy(sizePolicy)
 
         self.setLayout(layout)
@@ -63,7 +63,7 @@ class JarvisWindow(QMainWindow):
         # Toggle Jarvis Button
         self.toggle_button = QPushButton('Start Jarvis', self)
         self.toggle_button.setStyleSheet("background-color: rgba(15,175,35,0.6); border-radius: 16px; border: none; outline: none;")  # Style for the button
-        self.toggle_button.setFont(QFont("Arial", 12))
+        self.toggle_button.setFont(QFont("Arial", 16))
         self.toggle_button.clicked.connect(self.toggle_jarvis)
         self.toggle_button.setFixedSize(120, 40)  # Fixed size for the button
 
@@ -89,13 +89,14 @@ class JarvisWindow(QMainWindow):
                 background-color: rgba(52, 53, 65, 255);
                 color: #ececf1;
                 border-radius: 8px;
-                padding: 10px;
-                font-family: Arial;
+                padding: 16px;
+                font-family: Sans-serif;
+                font-size: 16px;
             }
             QListWidgetItem {
                 border-bottom: 1px solid #ececf1;
-                padding: 5px;
-                margin: 5px;
+                padding: 15px;
+                margin: 25px;
             }
         """)
 
@@ -109,22 +110,6 @@ class JarvisWindow(QMainWindow):
         central_widget.setLayout(main_layout)
 
         self.load_conversation()
-
-    @property
-    def current_color(self):
-        return self._current_color
-
-    @current_color.setter
-    def current_color(self, color):
-        self._current_color = color
-        self.update()  # Schedule a repaint event
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        gradient = QRadialGradient(self.width(), 0, min(2*self.width(), self.height()))
-        gradient.setColorAt(0.0, self.current_color)
-        gradient.setColorAt(1.0, QColor(182,186,89, 27))  # white at the edges
-        painter.fillRect(self.rect(), gradient)
 
 
     def load_conversation(self):
@@ -143,12 +128,9 @@ class JarvisWindow(QMainWindow):
 
 
     def add_message_to_conversation(self, speaker, text):
-        chat_item_widget = ChatItemWidget(f"{speaker}: {text}", Qt.AlignRight if speaker == 'user' else Qt.AlignLeft)
-        list_widget_item = QListWidgetItem(self.conversation_list)
-        list_widget_item.setSizeHint(chat_item_widget.sizeHint())  # Important for custom widgets
-        self.conversation_list.addItem(list_widget_item)
-        self.conversation_list.setItemWidget(list_widget_item, chat_item_widget)
-
+        item = QListWidgetItem(f"{speaker}: {text}")
+        item.setSizeHint(QSize(-1, 250))  # Set the height of the item
+        self.conversation_list.addItem(item)
 
     def write_conversation_to_file(self):
         conversation_file = os.path.join('jarvis', 'conversation.json')
@@ -162,18 +144,20 @@ class JarvisWindow(QMainWindow):
             for line in lines:
                 self.add_message_to_jarvis_conversation(line)
         else:
-            self.add_message_to_conversation(speaker, text + '\n')
+            self.add_message_to_conversation(speaker, text)
 
         self.conversation_list.scrollToBottom()
 
+
+    # Adds a message to the current Jarvis message
     def add_message_to_jarvis_conversation(self, text):
         if self.conversation_list.count() > 0:
             last_item = self.conversation_list.item(self.conversation_list.count() - 1)
-            chat_widget = self.conversation_list.itemWidget(last_item)
+            last_text = last_item.text()
 
-            if chat_widget.label.text().startswith("jarvis:") and not chat_widget.label.text().endswith('\n'):
+            if last_text.startswith("jarvis:") and not last_text.endswith('\n'):
                 # Append the word to the existing Jarvis message
-                chat_widget.label.setText(chat_widget.label.text() + " " + text)
+                last_item.setText(last_text + " " + text)
             else:
                 # Start a new Jarvis message
                 self.add_message_to_conversation('jarvis', text)
@@ -181,6 +165,8 @@ class JarvisWindow(QMainWindow):
             # If the list is empty, add the message
             self.add_message_to_conversation('jarvis', text)
 
+
+    # Begins to update the conversation in intervals
     def start_update(self, words, duration_per_word):
         update_conversation_in_intervals(words, duration_per_word, self.conversation_signal)
 
@@ -200,6 +186,8 @@ class JarvisWindow(QMainWindow):
             self.current_color = self.off_color
 
 
+
+### HELPER FUNCTIONS
 def update_conversation_in_intervals(words, duration_per_word, conversation_signal):
     word_index = 0
 
