@@ -28,6 +28,15 @@ class ChatItemWidget(QWidget):
         self.setLayout(layout)
         layout.addWidget(self.label)
 
+class ListItemWidget(QWidget):
+    def __init__(self, text, parent=None):
+        super().__init__(parent)
+        layout = QVBoxLayout(self)
+        label = QLabel(text, self)
+        label.setWordWrap(True)
+        label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        label.setStyleSheet("margin-top: 10px; margin-bottom: 10px;")  # Spacing
+        layout.addWidget(label)
 
 class JarvisWindow(QMainWindow):
      # Define a signal
@@ -62,8 +71,8 @@ class JarvisWindow(QMainWindow):
 
         # Toggle Jarvis Button
         self.toggle_button = QPushButton('Start Jarvis', self)
-        self.toggle_button.setStyleSheet("background-color: rgba(15,175,35,0.6); border-radius: 16px; border: none; outline: none;")  # Style for the button
-        self.toggle_button.setFont(QFont("Arial", 16))
+        self.toggle_button.setStyleSheet("background-color: rgba(15,175,35,0.6); border-radius: 16px; border: none; outline: none; color: white;")  # Style for the button
+        self.toggle_button.setFont(QFont("Sans-serif", 16))
         self.toggle_button.clicked.connect(self.toggle_jarvis)
         self.toggle_button.setFixedSize(120, 40)  # Fixed size for the button
 
@@ -92,13 +101,16 @@ class JarvisWindow(QMainWindow):
                 padding: 16px;
                 font-family: Sans-serif;
                 font-size: 16px;
-            }
+            } 
             QListWidgetItem {
                 border-bottom: 1px solid #ececf1;
-                padding: 15px;
-                margin: 25px;
-            }
+                padding: 5px;
+                margin: 10px 5px;  /* Top and bottom margin of 10px */
+            }    
         """)
+
+        # Ensure word wrap is enabled for each item
+        self.conversation_list.setWordWrap(True)
 
         # Add conversation list to its container
         conversation_layout.addWidget(self.conversation_list)
@@ -129,8 +141,10 @@ class JarvisWindow(QMainWindow):
 
     def add_message_to_conversation(self, speaker, text):
         item = QListWidgetItem(f"{speaker}: {text}")
-        item.setSizeHint(QSize(-1, 250))  # Set the height of the item
+        item.setFont(QFont("Sans-serif", 16))
+        item.setSizeHint(QSize(-1, 550))
         self.conversation_list.addItem(item)
+        self.conversation_list.scrollToBottom()
 
     def write_conversation_to_file(self):
         conversation_file = os.path.join('jarvis', 'conversation.json')
@@ -145,8 +159,8 @@ class JarvisWindow(QMainWindow):
                 self.add_message_to_jarvis_conversation(line)
         else:
             self.add_message_to_conversation(speaker, text)
-
         self.conversation_list.scrollToBottom()
+
 
 
     # Adds a message to the current Jarvis message
@@ -175,14 +189,14 @@ class JarvisWindow(QMainWindow):
             self.jarvis_core.stop()  # Assuming you have a stop method to safely terminate Jarvis
             self.is_jarvis_active = False
             self.toggle_button.setText('Start Jarvis')
-            self.toggle_button.setStyleSheet("background-color: rgba(15,175,35,0.6); border-radius: 16px; border: none; outline: none;")  # red button
+            self.toggle_button.setStyleSheet("background-color: rgba(15,175,35,0.6); border-radius: 16px; border: none; outline: none; color: white;")  # red button
             self.current_color = self.on_color
         else:
             self.jarvis_thread = Thread(target=self.jarvis_core.run, daemon=True)
             self.is_jarvis_active = True
             self.jarvis_thread.start()
             self.toggle_button.setText('Stop Jarvis')
-            self.toggle_button.setStyleSheet("background-color: rgba(235,15,15,0.6); border-radius: 16px; border: none; outline: none;")  # red button
+            self.toggle_button.setStyleSheet("background-color: rgba(235,15,15,0.6); border-radius: 16px; border: none; outline: none; color: white;")  # red button
             self.current_color = self.off_color
 
 
@@ -198,6 +212,7 @@ def update_conversation_in_intervals(words, duration_per_word, conversation_sign
             conversation_signal.update_conversation.emit('jarvis', current_word)
             word_index += 1
         else:
+            conversation_signal.update_conversation.emit('jarvis', '\n')
             timer.stop()
 
     timer = QTimer()
